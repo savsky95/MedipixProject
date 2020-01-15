@@ -4,7 +4,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "# THL SCAN WITH TimePix\n",
+    "# THL SCAN WITH TimePix Notebook example\n",
     "## Heavily influenced from matlab scripts for medipix2 analysis as can be viewed at this link https://twiki.ppe.gla.ac.uk/bin/view/DetDev/MedipixMATLABScripts"
    ]
   },
