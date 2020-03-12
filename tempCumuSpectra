@@ -1,0 +1,217 @@
+#CumuSpectra.py
+
+import matplotlib.pyplot as plt
+import numpy as np
+import glob as glob
+from scipy.signal import find_peaks
+
+#################################################################
+# For iToT Measurements in DAC Scan
+#################################################################
+acq = 6
+#acq = input("how many seperate acquisitions did you take?")                 #user input option
+
+
+##Load Acquisitions A1-n)
+A1 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/BAtest/FEB4/BAT(1)/*iToT*.txt')
+
+A2 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/BAtest/FEB4/BAT(2)/*iToT*.txt')
+
+A3 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/BAtest/FEB4/BAT(3)/*iToT*.txt')
+
+A4 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/BAtest/FEB4/BAT(4)/*iToT*.txt')
+
+A5 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/BAtest/FEB4/BAT(5)/*iToT*.txt')
+
+#A6 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/BAtest/FEB4/BAT(6)/*iToT*.txt')
+
+#################################################################
+
+#Data Processing A1
+A1.sort()
+
+B1 =[]                                     #B refers to THL Value (X-axis)
+for elem in A1:
+    B1.append(float((elem.split('_'))[3]))  #4 comes from the filename delimiter (t1_thlfine_430_iToT) 4 titles
+
+
+
+C1 = []                                    #Integral (#) of counts
+for elem in A1:
+    C1.append(np.sum(np.genfromtxt(elem)))
+
+E1 = np.gradient(C1)                       #Differential of Counts
+
+
+# fig,(ax1,ax2) = plt.subplots(2)
+# fig.suptitle('Acquisition 1')
+# ax1.plot(B1,C1)
+# ax1.set_title("Integral Counts")
+# ax2.plot(B1,E1)
+# ax2.set_title("Spectrum")
+# plt.show()
+
+
+
+#Data Processing A2
+
+A2.sort()
+
+B2 =[]                                     #B refers to THL Value (X-axis)
+for elem in A2:
+    B2.append(float((elem.split('_'))[2]))  #4 comes from the filename delimiter (t1_thlfine_430_iToT) 4 titles
+
+C2 = []                                    #Integral (#) of counts
+for elem in A2:
+    C2.append(np.sum(np.genfromtxt(elem)))
+
+E2 = np.gradient(C2)                       #Differential of Counts
+
+
+# fig,(ax1,ax2) = plt.subplots(2)
+# fig.suptitle('Acquisition 2')
+# ax1.plot(B2,C2)
+# ax1.set_title("Integral Counts")
+# ax2.plot(B2,E2)
+# ax2.set_title("Spectrum")
+# plt.show()
+
+
+#Data Processing A3
+
+A3.sort()
+
+B3 =[]                                     #B refers to THL Value (X-axis)
+for elem in A3:
+    B3.append(float((elem.split('_'))[3]))  #4 comes from the filename delimiter (t1_thlfine_430_iToT) 4 titles
+
+C3 = []                                    #Integral (#) of counts
+for elem in A3:
+    C3.append(np.sum(np.genfromtxt(elem)))
+
+E3 = np.gradient(C3)                       #Differential of Counts
+
+# fig,(ax1,ax2) = plt.subplots(2)
+# fig.suptitle('Acquisition 3')
+# ax1.plot(B3,C3)
+# ax1.set_title("Integral Counts")
+# ax2.plot(B3,E3)
+# ax2.set_title("Spectrum")
+# plt.show()
+
+
+#Data Processing A4
+
+A4.sort()
+
+B4 =[]                                     #B refers to THL Value (X-axis)
+for elem in A4:
+    B4.append(float((elem.split('_'))[3]))  #4 comes from the filename delimiter (t1_thlfine_430_iToT) 4 titles
+
+C4 = []                                    #Integral (#) of counts
+for elem in A4:
+    C4.append(np.sum(np.genfromtxt(elem)))
+
+E4 = np.gradient(C4)                       #Differential of Counts
+
+
+# fig,(ax1,ax2) = plt.subplots(2)
+# fig.suptitle('Acquisition 4')
+# ax1.plot(B4,C4)
+# ax1.set_title("Integral Counts")
+# ax2.plot(B4,E4)
+# ax2.set_title("Spectrum")
+# plt.show()
+
+#Data Processing A5
+
+A5.sort()
+
+B5 =[]                                     #B refers to THL Value (X-axis)
+for elem in A5:
+    B5.append(float((elem.split('_'))[3]))  #4 comes from the filename delimiter (t1_thlfine_430_iToT) 4 titles
+
+C5 = []                                    #Integral (#) of counts
+for elem in A5:
+    C5.append(np.sum(np.genfromtxt(elem)))
+
+E5 = np.gradient(C5)                       #Differential of Counts
+
+# fig,(ax1,ax2) = plt.subplots(2)
+# fig.suptitle('Acquisition 5')
+# ax1.plot(B5,C5)
+# ax1.set_title("Integral Counts")
+# ax2.plot(B5,E5)
+# ax2.set_title("Spectrum")
+# plt.show()
+
+
+#Data Processing A6
+
+A6.sort()
+
+B6 =[]                                     #B refers to THL Value (X-axis)
+for elem in A6:
+    B6.append(float((elem.split('_'))[3]))  #4 comes from the filename delimiter (t1_thlfine_430_iToT) 4 titles
+
+C6 = []                                    #Integral (#) of counts
+for elem in A6:
+    C6.append(np.sum(np.genfromtxt(elem)))
+
+E6 = np.gradient(C6)                       #Differential of Counts
+
+# fig,(ax1,ax2) = plt.subplots(2)
+# fig.suptitle('Acquisition 6')
+# ax1.plot(B6,C6)
+# ax1.set_title("Integral Counts")
+# ax2.plot(B6,E6)
+# ax2.set_title("Spectrum")
+# plt.show()
+
+
+# plt.show()
+
+
+#################################################################
+
+
+#Combining all acquisitions into a cumulative plot:
+
+# #B refers to "THL Vector"
+# #need differential counts summed E's
+
+##should really be updated as a dictionary
+
+
+
+
+arraylist = []
+temp = []
+for i in range(acq):
+    exec_str = "temp = E{}".format(i+1)
+    exec(exec_str)
+    arraylist.append(temp)
+
+sums  = np.add.reduce(arraylist)
+print(np.shape(sums))
+plt.plot(B1,sums)
+plt.grid()
+plt.title("Cumulative Acquisition Spectra Measurement")
+#plt.show()
+
+
+#Save cumulative spectra data for processing:
+
+thl_values = B1
+counts_values = sums
+import pickle
+data = { "thl": thl_values, "counts": counts_values }
+pickle.dump( data, open( "save.p", "wb" ) )
+
+# #################################################################
+
+
+
+
+
+
