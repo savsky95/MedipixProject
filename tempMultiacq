@@ -1,0 +1,208 @@
+import glob as glob
+import numpy as np
+import matplotlib.pyplot as plt
+from operator import add
+from scipy.stats import norm
+from scipy.optimize import curve_fit
+from scipy import asarray as ar,exp
+from scipy.signal import savgol_filter
+from scipy.signal import find_peaks
+
+##############################################################
+## THIS CODE PROVIDES AN OPTION TO USE FILENAMES RATHER THAN GLOB TO LOAD YOUR DATA.
+## HIGHLY SUGGEST USING CumuSpectra.py for speed & most updated code
+
+##############################################################
+# Section 1: upload files
+##############################################################
+# Use glob to find your data in your directory
+# Use a list for each acquisition.
+
+
+
+acq1 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/*BAtest/bat(mon)_t1/t1*iToT*.txt')
+acq2 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/*BAtest/bat(mon)_t2/t2*iToT*.txt')
+acq3 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/*BAtest/bat(mon)_t3/t3*iToT*.txt')
+acq4 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/*BAtest/bat(mon)_t4/t4*iToT*.txt')
+acq5 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/*BAtest/bat(mon)_t5/t5*iToT*.txt')
+acq6 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/*BAtest/bat(mon)_t6/t6*iToT*.txt')
+
+# the start and stop of the acquisition
+
+
+element = input("what element used? *format example: BA133")
+THLStart = 430 #int(input("please enter starting THL value: "))
+THLStop = 520 #int(input("please enter ending THL value: "))
+#Steps = int(input("what step size for your acquisition: ")) # 5
+# if Steps is != 1:
+#    print("Using a step size other than 1 will not give the most precise callibration coefficents")
+
+#create some dummys to put our data into, you will need to add another for each acquisition
+
+        ##future update: create dummies through for loop
+
+SumCount1 = []
+SumCount2 = []
+SumCount3 = []
+SumCount4 = []
+SumCount5 = []
+SumCount6 = []
+
+
+
+
+
+#deterimines how many thls you iterate over
+THLlist = THLStop - THLStart + 1
+
+
+#ExpFile = THLlist/Steps #expected files
+
+
+#check to makesure the number of thl values are the same (note this does not make sure your thls are not mismatched)
+for i in range(np.max([len(acq1),len(acq2)])):
+    if i < np.min([len(acq1),len(acq2)]):
+        #load first acquisition files and sort on thl
+        a = np.loadtxt(acq1[i])
+        a.sort()
+        np.asarray(a)
+
+        b = np.loadtxt(acq2[i])
+        b.sort()
+        np.asarray(b)
+
+        c = np.loadtxt(acq3[i])
+        c.sort()
+        np.asarray(c)
+
+        d = np.loadtxt(acq4[i])
+        d.sort()
+        np.asarray(d)
+
+        e = np.loadtxt(acq5[i])
+        e.sort()
+        np.asarray(e)
+
+        f = np.loadtxt(acq6[i])
+        f.sort()
+        np.asarray(f)
+
+        for k in range(THLlist):
+            SumCount1.append(a[k].sum())
+            SumCount2.append(b[k].sum())
+            SumCount3.append(c[k].sum())
+            SumCount4.append(d[k].sum())
+            SumCount5.append(e[k].sum())
+            SumCount6.append(f[k].sum())
+            #print('Complete')
+    else:
+        print("failed attempt, please see python errors in the gutter")
+
+
+
+
+N = list(map(sum,zip(SumCount1,SumCount2,SumCount3,SumCount4,SumCount5,SumCount6)))
+
+
+
+# Future Update : will let you put THLstart, THLstop and expectedfiles as arguments.
+
+THLVal = np.linspace(430,520,91)
+
+
+
+
+
+# #find max y and corresponding max x
+
+ max_y = max(N)  # Find the maximum y value
+ max_x = THLVal[N.argmax()]  # Find the x value corresponding to the maximum y value
+
+
+#plot integral (total) counts on the detector
+
+# plt.subplot(211)
+# plt.plot(THLVal,N, marker = '^')
+# plt.title("Integral Counts")
+# #plt.plot([], [], ' ', label="Max Counts at THL {}".format(max_x))
+# plt.legend()
+# plt.grid()
+# plt.show()
+
+#plot the differential (spectrum)
+
+diffN = np.gradient(N)
+
+# plt.subplot(212)
+plt.plot(THLVal,diffN)
+plt.title('Spectrum {} Test'.format(element))
+plt.grid()
+plt.show()
+
+
+# # # #################
+
+
+# # # Lets now add a filter to smooth and fit a curve
+
+# # ########################
+
+
+# x = THLVal
+# y = diffN
+
+# yfilt = savgol_filter(y,11,3)           #argument (data,windowsize,poly-order)
+
+# y = yfilt
+
+
+
+#                          # find arithmetic mean
+# peak_val = y.max()
+# mean = x[y.argmax()]
+# sigma= mean - np.where(y > peak_val* np.exp(-.5))[0][0]
+
+# Text = 'mean = {0:.3f} and sigma = {1:.3f}'.format(mean,sigma)
+
+# def Gauss(x, a, x0, sigma):
+#     return a * np.exp(-(x - x0)**2 / (2 * sigma**2))
+
+# popt,pcov = curve_fit(Gauss, x, y, p0=[peak_val, mean, sigma])
+
+# plt.plot(x, y, 'b+:', label='data')
+# plt.plot(x, Gauss(x, *popt), 'y-', label='fitted curve')
+# plt.plot([], [], ' ', label="First peak: Mean {}, Sigma {}".format(mean,sigma))
+# plt.legend()
+# #plt.title(' Global Spectrum Fit from Measurement #s  {} to {}'.format(THLstart, THLstop))
+# plt.xlabel("THL [ARB]")
+# plt.ylabel(r'$\frac{DN}{DE}$')
+# #plt.xlim(400,550)
+
+
+
+# # plt.grid()
+# # plt.show()
+
+# # print(Text)
+
+
+
+# # ################################
+# # # finding peaks with unsmoothed data
+# # ################################
+
+
+# # signal = diffN[10:600]
+# # peaks, _ = find_peaks(signal, height=0)
+# # plt.plot(signal)
+# # plt.plot(peaks, signal[peaks], "x")
+# plt.plot(np.zeros_like(diffN), "--", color="gray")
+# plt.title("unsmoothed curve and initial peak search")
+# plt.ylabel("DN/DE")
+# plt.xlabel("THL In arbitrary values")
+# plt.show()
+
+# #############################################
+
+
+
