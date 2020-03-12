@@ -1,0 +1,20 @@
+import numpy as np
+from numpy import loadtxt
+import matplotlib.pyplot as plt
+import glob as glob
+from scipy.signal import savgol_filter
+
+
+
+S = np.loadtxt('spectrumimg.txt')   #gives 256 x 256 matrix
+S.flatten()
+X = np.argwhere(S)
+#Now zeros no longer factor into the historgram
+plt.hist(X,bins= 50)
+#plt.title("Am Spect : Output from Pixet")
+
+plt.savefig("Am Spect Output")
+
+
+
+#plt.title("Am Spect : Output from Pixet")
