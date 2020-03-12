@@ -1,0 +1,82 @@
+#Noise scan
+
+import glob as glob
+import matplotlib.pyplot as plt
+import numpy as np
+
+##Apart of initalization procedure
+
+#Load files through glob:
+
+A1 = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/FEB12/NoiseScanFile/*iToT*.txt')
+
+#Single acquisition with no source. This determines the "base floor" of hits while in a standard setting
+#acquisition time 1 second in range of 300 to 500
+#Polarity = Positive
+
+A1.sort()
+
+B1 =[]                                     #B refers to THL Value (X-axis)
+for elem in A1:
+    B1.append(float((elem.split('_'))[2]))  #4 comes from the filename delimiter (t1_thlfine_430_iToT) 4 titles
+
+
+
+C1 = []                                    #Integral (#) of counts
+for elem in A1:
+    C1.append(np.sum(np.genfromtxt(elem)))
+
+
+
+plt.plot(B1,C1)
+plt.title("Noise Scan, integral ToT")
+plt.ylabel("Noise Count")
+plt.xlabel("THL DAC")
+plt.xlim(300,525)
+plt.savefig("iToT Noise Scan")
+plt.show()
+
+
+
+A1b = glob.glob('/media/sav/Windows/Users/savan/Desktop/PIXETMEASUREMENTS/FEB12/NoiseScanFile/*Event*.txt')
+
+#Single acquisition with no source. This determines the "base floor" of hits while in a standard setting
+#acquisition time 1 second in range of 300 to 500
+#Polarity = Positive
+
+A1b.sort()
+
+B1b =[]                                     #B refers to THL Value (X-axis)
+for elem in A1b:
+    B1b.append(float((elem.split('_'))[2]))  #4 comes from the filename delimiter (t1_thlfine_430_iToT) 4 titles
+
+
+
+C1b = []                                    #Integral (#) of counts
+for elem in A1b:
+    C1b.append(np.sum(np.genfromtxt(elem)))
+
+
+
+plt.plot(B1b,C1b)
+plt.title("Noise Scan Event Method")
+plt.xlim(300,525)
+plt.ylabel("Noise Count")
+plt.xlabel("THL DAC")
+plt.savefig("Event Noise Scan")
+plt.show()
+
+
+# plt.plot(B1,C1)
+# plt.title("Noise Scan")
+# plt.xlim(65,75)
+# plt.ylabel("Noise Count")
+# plt.xlabel("THL DAC")
+# plt.show()
+
+# plt.plot(B1,C1)
+# plt.title("Noise Scan")
+# plt.xlim(160,180)
+# plt.ylabel("Noise Count")
+# plt.xlabel("THL DAC")
+# plt.show()
