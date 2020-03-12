@@ -1,0 +1,87 @@
+##eventscan.py
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+import glob as glob
+import pandas as pd
+import os
+import asciitable
+
+#find files in directory and sort them
+
+path = "/media/sav/Seagate Portable Drive/Data/FEB12/EventTestBA/pixel1/p1A4"
+totalF = glob.glob(os.path.join(path, "*.t3pa"))
+totalF.sort()
+
+#initialize dummy temp array and find diminsions of arrays to be filled by file characteristics
+
+tmp0 = []
+
+for i,file in enumerate(totalF):
+    idata = asciitable.read(file)
+
+    n_rows = np.shape(idata['Index'])
+    n_rows=n_rows[0]
+    tmp0.append(n_rows)
+
+n_rows = np.max(tmp0)
+n_file = len(totalF)
+
+#generate arrays of the values stored under specific keys
+#why do i need to set up empty array rather than empty/dummy x = [] shape perhaps?
+
+M_Index = np.empty((n_rows,n_file))
+ToAs = np.empty((n_rows,n_file))
+ToTs = np.empty((n_rows,n_file))
+FToAs = np.empty((n_rows,n_file))
+Ovrfs = np.empty((n_rows,n_file))
+
+#read all files columns into their own matrix. ie file 1, tot vals ; file 2 , tot vals ; etc
+
+for i,file in enumerate(totalF):
+    idata = asciitable.read(file)
+
+    M_Index[0:(np.shape(idata['Index']))[0],i] = idata['Index']
+    ToAs[0:(np.shape(idata['Index']))[0],i] = idata['ToA']
+    ToTs[0:(np.shape(idata['Index']))[0],i] = idata['ToT']
+    FToAs[0:(np.shape(idata['Index']))[0],i] = idata['FToA']
+    Ovrfs[0:(np.shape(idata['Index']))[0],i] = idata['Overflow']
+
+
+#check shapes of all keys ; they should be the same size!!!
+#print(np.shape(ToAs), np.shape(ToTs), np.shape(FToAs), np.shape(Ovrfs))
+#Out: 145087, 15
+
+
+#Create additional datasets for specific processing
+
+
+
+#Begin with ToTs
+
+#known threshold = user input
+
+#TOts in 140000 by 15
+
+
+#Dat2 = ToAs[:,1]
+
+print(np.shape(M_Index))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
