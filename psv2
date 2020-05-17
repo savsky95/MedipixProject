@@ -1,0 +1,120 @@
+import numpy as np
+import glob
+from astropy.io import ascii
+import pandas as pd
+import os
+import matplotlib.pyplot as plt
+from scipy.signal import savgol_filter
+from scipy.signal import find_peaks
+from matplotlib.ticker import StrMethodFormatter
+from scipy import optimize
+import matplotlib.patches as mpatches
+#acq1 = glob.glob('/media/sav/3029-77D8/54/acq1/acq_1_*.t3pa') Barium 
+
+
+def read_file(filename):
+#Index   Matrix Index    ToA     ToT     FToA    Overflow
+    data=pd.read_table(filename) 
+    A1 = data['ToT']
+    Q = np.asarray(A1)
+    return Q
+
+def main():
+    directory = '/media/sav/3029-77D8/54/acq1'
+    fileterm = 't3pa'
+
+    files = glob.glob('%s/*.%s'%(directory,fileterm))
+    Cond=[]
+    
+    for filename in files:
+        print('processing ... %s'%filename)
+        Cond.append(read_file(filename))
+
+    Data = np.asarray(Cond)
+    print(np.shape(Cond))
+
+    return Data
+    
+if __name__ == "__main__":
+    main()
+
+
+
+Dat = main()
+AA = np.concatenate(Dat,axis = 0)
+
+
+
+##########################################################################
+
+
+
+
+
+#find length of data D
+
+L = len(AA)
+
+
+
+#determine bins 
+Bin1 = np.sqrt(L)
+
+
+# #Apply our determined histogram parameters and plot! 
+n,bins,patches= plt.hist(AA, bins = Bin1.astype(int), label = "BA SOURCE",alpha = .5) 
+plt.title('BA histogram')
+plt.show()
+
+# X = (bins[:-1] + bins[1:])/2
+
+# x = np.asarray(X)
+
+# yfilt = savgol_filter(n,11,3)           #argument (data,windowsize,poly-order)
+
+
+# fig, axs = plt.subplots(2)
+# fig.suptitle("Spectrum Measurement ")
+# axs[0].set_title('savogol filter applied')
+# axs[1].set_title('no filter')
+# axs[0].plot(x,yfilt)
+# axs[1].plot(x,n)
+# for ax in axs.flat:
+#     ax.set(xlabel='arb energy', ylabel='counts')
+# plt.show()
+###############################################
+
+
+#now we fit the peaks. 
+#for AM241 there is a very prominent single peak we wil grab and call 59.6eV
+# #(we have data with blocked alphas to fit as well.)
+
+# peaks, _ = find_peaks(n, height=1500) #height is set above a certain threshold which can be calulated at a later time when more data is avail.
+# plt.plot(n)
+# plt.plot(peaks, n[peaks],"*")
+# plt.show()
+
+# maxy = max(n)
+
+# ##now we find the index corresponding to maxy in n 
+# index1 = np.where(n == maxy)
+# energy = x[index1]
+# E = float(energy[0])
+
+# TEXT = ("the highest peak has a count number of {}, we find arb energy level {:.3f} corresponds to ())".format(maxy,E))
+# print (TEXT)
+
+# ##final "pretty spectra"
+
+# plt.title("Spectra Measurement")
+# plt.plot(x,n,label = "BA")
+# plt.axvline(x = energy,ls = 'dotted', label = "()")
+# plt.legend()
+# plt.figtext(0.5, 0.01, TEXT, wrap=True, horizontalalignment='center', fontsize=12)
+# plt.show()
+
+
+
+
+
+
